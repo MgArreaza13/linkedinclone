@@ -5,7 +5,7 @@ import {
   ShareOutlined,
   ThumbUpAltOutlined,
 } from "@material-ui/icons";
-import React from "react";
+import React, { forwardRef } from "react";
 import InputOption from "../inputOption";
 import {
   PostContainer,
@@ -15,9 +15,9 @@ import {
   PostButtons,
 } from "./styles";
 
-function Post({ name, description, message, photoUrl }) {
+const Post = forwardRef(({ name, description, message, photoUrl }, ref) => {
   return (
-    <PostContainer>
+    <PostContainer ref={ref}>
       <PostHeader>
         <Avatar src={photoUrl}>{name[0]}</Avatar>
         <PostInfo>
@@ -36,6 +36,6 @@ function Post({ name, description, message, photoUrl }) {
       </PostButtons>
     </PostContainer>
   );
-}
+});
 
 export default Post;

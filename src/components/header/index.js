@@ -16,16 +16,14 @@ import { logout, selectUser } from "../../features/userSlice";
 import { auth } from "../../firebase";
 
 function Header() {
-
-
   const user = useSelector(selectUser);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const logoutOfApp = () => {
-    dispatch(logout())
-    auth.signOut()
-  }
+    dispatch(logout());
+    auth.signOut();
+  };
   return (
     <HeaderContainer>
       <HeaderLeft>
@@ -45,11 +43,9 @@ function Header() {
         <HeaderOption Icon={BusinessCenter} title="Jobs" />
         <HeaderOption Icon={Chat} title="Messaging" />
         <HeaderOption Icon={Notifications} title="Notifications" />
-        <HeaderOption avatar={true} title="me" onClick={logoutOfApp} />
-
-
-
-
+        {user && (
+          <HeaderOption avatar={true} title="Logout" onClick={logoutOfApp} />
+        )}
       </HeaderRight>
     </HeaderContainer>
   );

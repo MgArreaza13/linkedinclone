@@ -19,12 +19,13 @@ import {
 } from "./styles";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
+import FlipMove from "react-flip-move";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
   const [value, setValue] = useState("");
 
-  const user = useSelector(selectUser)
+  const user = useSelector(selectUser);
 
   useEffect(() => {
     db.collection("posts")
@@ -82,17 +83,19 @@ function Feed() {
         </FeedInputOptions>
       </FeedInputContainer>
 
-      {posts.map(({ id, data: { name, description, message, photoUrl } }) => {
-        return (
-          <Post
-            key={id}
-            name={name}
-            description={description}
-            message={message}
-            photoUrl={photoUrl}
-          />
-        );
-      })}
+      <FlipMove>
+        {posts.map(({ id, data: { name, description, message, photoUrl } }) => {
+          return (
+            <Post
+              key={id}
+              name={name}
+              description={description}
+              message={message}
+              photoUrl={photoUrl}
+            />
+          );
+        })}
+      </FlipMove>
     </FeedContainer>
   );
 }
