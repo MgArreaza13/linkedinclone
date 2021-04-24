@@ -6,8 +6,11 @@ import {
   Image,
   Subscriptions,
 } from "@material-ui/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { db } from "../../firebase";
 import InputOption from "../inputOption";
+import Post from "../post";
+import firebase from "firebase";
 import {
   FeedContainer,
   FeedInputContainer,
@@ -16,6 +19,36 @@ import {
 } from "./styles";
 
 function Feed() {
+  const [posts, setPosts] = useState([]);
+  const [value, setValue] = useState("");
+
+  useEffect(() => {
+    db.collection("posts")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        setPosts(
+          snapshot.docs.map((doc) => {
+            return {
+              id: doc.id,
+              data: doc.data(),
+            };
+          })
+        );
+      });
+  }, []);
+
+  const sendPost = (e) => {
+    e.preventDefault();
+    db.collection("posts").add({
+      name: "Miguel Arreaza",
+      description: "this is a test",
+      message: value,
+      photoUrl: "",
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    setValue("");
+  };
+
   return (
     <FeedContainer>
       <FeedInputContainer>
@@ -23,8 +56,14 @@ function Feed() {
           {/* createIcon */}
           <Create />
           <form>
-            <input type="text" />
-            <button type="submit">Send</button>
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+            />
+            <button type="submit" onClick={sendPost}>
+              Send
+            </button>
           </form>
         </FeedInput>
         <FeedInputOptions>
@@ -38,6 +77,18 @@ function Feed() {
           />
         </FeedInputOptions>
       </FeedInputContainer>
+
+      {posts.map(({ id, data: { name, description, message, photoUrl } }) => {
+        return (
+          <Post
+            key={id}
+            name={name}
+            description={description}
+            message={message}
+            photoUrl={photoUrl}
+          />
+        );
+      })}
     </FeedContainer>
   );
 }
