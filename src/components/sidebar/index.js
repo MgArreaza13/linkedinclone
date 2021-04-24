@@ -1,4 +1,6 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/userSlice";
 import {
   SidebarContainer,
   SidebarTop,
@@ -11,6 +13,8 @@ import {
   Hash,
 } from "./styles";
 function Sidebar() {
+  const user = useSelector(selectUser);
+
   const recentItem = (topic) => {
     return (
       <RecentItem>
@@ -27,9 +31,9 @@ function Sidebar() {
           src="https://images.hdqwalls.com/wallpapers/bthumb/ribbon-generator-abstract-4k-3b.jpg"
           alt="image"
         />
-        <SidebarAvatar />
-        <h2>mgarreaza13</h2>
-        <h4>mg.arreaza.13@gmail.com</h4>
+        <SidebarAvatar src={user.photoUrl}>{user.email[0]}</SidebarAvatar>
+        <h2>{user.displayName}</h2>
+        <h4>{user.email}</h4>
       </SidebarTop>
       <SidebarStatsContainer>
         <SidebarStat>

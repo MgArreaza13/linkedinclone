@@ -17,10 +17,14 @@ import {
   FeedInput,
   FeedInputOptions,
 } from "./styles";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/userSlice";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
   const [value, setValue] = useState("");
+
+  const user = useSelector(selectUser)
 
   useEffect(() => {
     db.collection("posts")
@@ -40,10 +44,10 @@ function Feed() {
   const sendPost = (e) => {
     e.preventDefault();
     db.collection("posts").add({
-      name: "Miguel Arreaza",
-      description: "this is a test",
+      name: user.displayName,
+      description: user.email,
       message: value,
-      photoUrl: "",
+      photoUrl: user.photoUrl || "",
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
     setValue("");
